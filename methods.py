@@ -18,7 +18,6 @@ class meth():
 
         for line in open("ver.txt"):
             for match in re.finditer(pattern, line):
-                print(line)
                 Ui_MainWindow.TOutput.append(line)
 
         # path = 'ver.txt'
