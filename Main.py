@@ -1,6 +1,6 @@
 from Ui_win import Ui_MainWindow
 from methods import meth
-from PyQt5.QtWidgets import QLabel, QMainWindow,QMessageBox,QApplication, QVBoxLayout, QWidget
+from PyQt5.QtWidgets import QMainWindow,QMessageBox,QApplication
 import sys
 
 
@@ -24,7 +24,7 @@ class MainWindow(QMainWindow):
             rp= QMessageBox.question(self,'Close Window','Do you want to save',
                 QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
             if rp == QMessageBox.Yes:
-                self.ui.save()
+                meth.save(meth)
             event.accept()
 
 
