@@ -1,11 +1,11 @@
-from Ui_win import *
-from Main import *
-from Main import MainWindow
+# # from Ui_win import U
+# from Main import *
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QAction, QMainWindow,QApplication,QFileDialog,QMessageBox
 from PyQt5.QtCore import QDir
 import sys
 class meth():
+    window=[]
     file_name=[]
     data=""
     def pushlex(self):
@@ -21,7 +21,7 @@ class meth():
             meth.file_name= dialog.selectedFiles()
             self.path = meth.file_name[0]
 
-            if meth.file_name[0].endswith('.java'):
+            if meth.file_name[0].endswith('.txt'):
                 with open(meth.file_name[0],'r') as f:
                     meth.data= f.read()
                     self.TInput.setText(meth.data)
@@ -60,7 +60,6 @@ class meth():
     def paste(self):
         cp = QApplication.clipboard().text()
         self.TInput.insertPlainText(cp)
-    def neww(self):
-        self.ui.window = MainWindow()
-        self.ui.window.show()
-
+    def neww(window):
+        meth.window.append(window) 
+        window.show()

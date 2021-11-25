@@ -9,9 +9,8 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from methods import meth
 
-class Ui_MainWindow(meth):
+class Ui_MainWindow():
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(800, 600)
@@ -99,12 +98,3 @@ class Ui_MainWindow(meth):
         self.bar_cut.setText(_translate("MainWindow", "Cut"))
 # from menu import Menu
 #actions
-        self.lex_button.clicked.connect(self.pushlex)
-        self.synt_button.clicked.connect(self.pushsyn)
-        self.bar_openfile.triggered.connect(self.openfile)
-        self.bar_newfile.triggered.connect(self.newfile)
-        self.bar_savefile.triggered.connect(self.save)
-        self.bar_copy.triggered.connect(self.ctrl_c)
-        self.bar_cut.triggered.connect(self.cut)
-        self.bar_paste.triggered.connect(self.paste)
-        self.bar_new_window.triggered.connect(self.neww)  
