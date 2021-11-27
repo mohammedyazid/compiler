@@ -10,11 +10,11 @@ class meth():
     data=""
     def pushlex(self):
         print("Analyse Lexical")
-        Ui_MainWindow.TInput.setText("hi")
+        Ui_MainWindow.TInput.setText("")
     def pushsyn(self):
         print("Analyse Syntaxique")
        
-        pattern = re.compile(".@gmail.com")
+        pattern = re.compile(".@gmail.com|.mac.com")
 
         for line in open("ver.txt"):
             for match in re.finditer(pattern, line):
