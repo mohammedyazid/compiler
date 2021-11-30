@@ -14,10 +14,13 @@ class meth():
     def pushsyn(self):
         print("Analyse Syntaxique")
         mail=Ui_MainWindow.TInput.toPlainText()
+        line=0
         for line in open("ver.txt"):
             pattern = re.compile(line)
             for match in re.finditer(pattern, mail):
-                Ui_MainWindow.TOutput.append("Forme Valid")
+                Ui_MainWindow.TOutput.setText("Forme Valid")
+            if re.search(pattern,mail) is None:
+                Ui_MainWindow.TOutput.setText("Invalid Forme")
         # path = 'ver.txt'
         # with open(os.path.join(os.path.dirname(__file__), path), 'r') as input_file:
         #     data = input_file.read()

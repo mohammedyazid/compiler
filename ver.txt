@@ -1,2 +1,1 @@
-.@gmail.com
-.@mac.com
+.@gmail.com$|.mac.com$
