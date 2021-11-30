@@ -13,13 +13,11 @@ class meth():
         Ui_MainWindow.TInput.setText("")
     def pushsyn(self):
         print("Analyse Syntaxique")
-       
-        pattern = re.compile(".@gmail.com|.mac.com")
-
+        mail=Ui_MainWindow.TInput.toPlainText()
         for line in open("ver.txt"):
-            for match in re.finditer(pattern, line):
-                Ui_MainWindow.TOutput.append(line)
-
+            pattern = re.compile(line)
+            for match in re.finditer(pattern, mail):
+                Ui_MainWindow.TOutput.append("Forme Valid")
         # path = 'ver.txt'
         # with open(os.path.join(os.path.dirname(__file__), path), 'r') as input_file:
         #     data = input_file.read()
