@@ -1,0 +1,16 @@
+
+class App {
+    public static void main() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Type any number");
+        int num1=sc.nextInt();
+        float num2=sc.nextFloat();
+        String msg = sc.nextLine();
+        if(numnum2==2){
+        System.out.println('A');
+    
+    }else{
+        System.out.println(":>");
+    }
+}
+}

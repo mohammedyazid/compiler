@@ -1,0 +1,31 @@
+statement   : KEYWORD:class IDENTIFIER { func }
+
+func        : KEYWORD:public KEYWORD:void IDENTIFIER () { atom }
+            : atom
+        
+
+expr        : DIGIT?
+            : letters?
+
+
+DIGIT       :0123456789
+letters     :A-Z a-z
+
+
+atom        : KEYWORD:(int|float) IDENTIFIER (= DIGIT;|;)
+            : KEYWORD:char IDENTIFIER (= 'letters')
+            : Scanner-dec
+            : KEYWORD:System . out . println(expr)
+            : if-expr
+
+
+scanner-dec : KEYWORD:Scanner IDENTIFIER = KEYWORD:new Scanner(System.in);
+            : int IDENTIFIER = IDENTIFIER.nextInt();
+            : float IDENTIFIER = IDENTIFIER.nextFloat();
+            : String IDENTIFIER = IDENTIFIER.nextLine();
+
+
+if-expr     : KEYWORD:if ( expr = expr ) { atom } (else-expr|;)
+
+
+else-expr   : KEYWORD:else { atom };
