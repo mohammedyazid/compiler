@@ -7,7 +7,7 @@ from nltk.tokenize import RegexpTokenizer
 # tokens = tokenizer.tokenize(content)
 # print(tokens)
 hi = input()
-if re.match("^.*$",hi):
+if re.match("^(=)$|^(\+){1,2}$|^(-)$|^(\<)|^(\>)$",hi):
     print("true")
 else:
     print("false")

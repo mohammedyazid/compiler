@@ -8,7 +8,7 @@ import lexer
 import Parser
 import re,nltk
 motscles = "class|String|int|char|float|Scanner|nextInt|nextFloat|nextLine|System|out|println|if|else|public|static|void|new|^in$"
-operateurs = "^(=)$|^(\+){1,2}$|^(-)$|^(<)$|^(>)$"
+operateurs = "^(=)$|^(\+){1,2}$|(-)|(<)|(>)"
 chiffres = "^(\d+)$"
 symboles = "[\[!\|{};,\.']|\(\){|\(|\)|{}|\[\]|\{|\}|\""
 identif = "^[a-zA-Z_]+[a-zA-Z0-9_]*"

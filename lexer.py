@@ -4,7 +4,7 @@ motscles = "class|String|int|char|float|Scanner|nextInt|nextFloat|nextLine|Syste
 operateurs = "^(=)$|^(\+){1,2}$|^(-)$|^(<)$|^(>)$"
 entier = "^(\d+)$"
 reel = "^(\d+)\.(\d+)$"
-symboles = "[\[!\|{};,\.']|\(\){|\(|\)|{}|\[\]|\{|\}|\""
+symboles = "[\[!\|{};,\.']|\(\){|\(|\)|{}|\[\]|\{|\}|\"|\?"
 identif = "^[a-zA-Z_]+[a-zA-Z0-9_]*$"
 stringvar = ' *[\']{1} *[A-za-z0-9]+ *[\']{1}$ | *[\"]{1} *[A-za-z0-9]+ *[\"]{1}$'
 Space = "\n"
@@ -20,8 +20,9 @@ class lexer(object):
         content=""
         with open('Test.lang','r') as file:
             content = file.read()
-            tokenizer = RegexpTokenizer("[\w]+|\n|\.|\"|\'|,|\{|\}|\(|\)|\=|;|:|\[|\]")
+            tokenizer = RegexpTokenizer("[\w]+|\n|\.|\"|\'|,|\{|\}|\(|\)|\=|;|:|\[|\]|>|<|-|!")
             token_list = tokenizer.tokenize(content) 
+        print(token_list)
         for word in token_list:
             if(re.findall(motscles,word)):
                 if word=='class':
@@ -101,12 +102,22 @@ class lexer(object):
                     tokens.append(['QUAT_MARK',word])
                 elif word == "'":
                     tokens.append(['PUNC_MARK',word])
+                elif word == '>':
+                    tokens.append(['GREATER',word])
+                elif word == '<':
+                    tokens.append(['LESS',word])
+                elif word == '!':
+                    tokens.append(['NOT',word])
+                elif word == '?':
+                    tokens.append(['Q_MARK',word])
+            else:
+                tokens.append(['INVALID',word])
              
             
             
             
     
-        print(tokens)
+        #print(tokens)
         #Returnn created tokens
         return tokens
       

@@ -20,6 +20,7 @@ class Parser(object):
         self.iffound=False
         self.elsefound=False
         self.brackcount=0
+        self.opbrackcount=0
         Ui_MainWindow.OUTPUT.setText('')
         while self.token_index<len(self.tokens):
             token_type = self.tokens[self.token_index][0]
@@ -57,11 +58,12 @@ class Parser(object):
                         self.parse_scannercheck(self.tokens[self.token_index:len(self.tokens)]) 
                     elif token_type != "PUBLIC" and self.token_index ==len(self.tokens)-1 and self.mainfound==False:
                         Ui_MainWindow.OUTPUT.append(" ERROR : Main Function Not Found")
-                    else:
-                        # self.DisplayError("unknown")
-                        pass
+                    
+                        
                     if token_value == "}":
-                        self.brackcount+=1                   
+                        self.brackcount+=1      
+                    if token_value == "{":
+                        self.opbrackcount+=1              
                     self.token_index+=1
                     
                     #######Line Counter#######
@@ -84,6 +86,13 @@ class Parser(object):
                 self.DisplayError('}')
         elif self.iffound==True and self.elsefound==True and self.brackcount>4:
             self.DisplayError('+}')
+            
+        # if self.classfound==True and self.mainfound==True and self.iffound==False and self.elsefound==False and self.opbrackcount>2:
+        #     self.DisplayError('+{')
+        # elif self.iffound==True and self.opbrackcount>3 and self.elsefound==False:
+        #     self.DisplayError('+{')
+        # elif self.iffound==True and self.elsefound==True and self.opbrackcount>4:
+        #     self.DisplayError('+{')
         
     ##################Variable Declaration Function############
     def parse_variable_declaration(self,token_stream):
@@ -708,7 +717,7 @@ class Parser(object):
                             i += 1
                             token_type = token_stream[i][0]
                             token_value = token_stream[i][1]
-                        if token_value ==">" or token_value =="<" or token_value=="=":
+                        if token_value ==">" or token_value =="<" or token_value=="=" or token_value=="!":
                             if i < (len(token_stream)-1):
                                 i += 1
                                 token_type = token_stream[i][0]
@@ -718,26 +727,76 @@ class Parser(object):
                                     i += 1
                                     token_type = token_stream[i][0]
                                     token_value = token_stream[i][1]
-                            if token_type =="IDENTIF" or "NUMBER":
-                                if i < (len(token_stream)-1):
-                                    i += 1
-                                    token_type = token_stream[i][0]
-                                    token_value = token_stream[i][1] 
-                                if token_type=="CL_PARENT":
+                                if token_type =="IDENTIF" or "NUMBER":
+                                    if i < (len(token_stream)-1):
+                                        i += 1
+                                        token_type = token_stream[i][0]
+                                        token_value = token_stream[i][1] 
+                                    if token_type=="CL_PARENT":
+                                        if i < (len(token_stream)-1):
+                                            i += 1
+                                            token_type = token_stream[i][0]
+                                            token_value = token_stream[i][1]
+                                        if token_type=="OP_BRACK":
+                                            Ui_MainWindow.OUTPUT.append(" If statement success!")
+                                            self.iffound=True
+                                            break
+                                        elif token_type =="NEWLINE":
+                                            while token_type =="NEWLINE":
+                                                if i < (len(token_stream)-1):
+                                                    i += 1
+                                                    token_type = token_stream[i][0]
+                                                    token_value = token_stream[i][1]
+                                            if token_type!="OP_BRACK":
+                                                self.DisplayError('{')
+                                            Ui_MainWindow.OUTPUT.append(" If statement success!")
+                                            self.iffound=True
+                                            break
+                                    else:
+                                        self.DisplayError(')')
+                                else:
+                                    self.DisplayError('ivc')
+                            else:
+                                i = i - 1
+                                token_type = token_stream[i][0]
+                                token_value = token_stream[i][1]
+                                print(token_value)
+                                if token_value =="<" or token_value ==">":
                                     if i < (len(token_stream)-1):
                                         i += 1
                                         token_type = token_stream[i][0]
                                         token_value = token_stream[i][1]
-                                    if token_type=="OP_BRACK":
-                                        Ui_MainWindow.OUTPUT.append(" If statement success!")
-                                        self.iffound=True
-                                        break
+                                    if token_type =="IDENTIF" or "NUMBER":
+                                        if i < (len(token_stream)-1):
+                                            i += 1
+                                            token_type = token_stream[i][0]
+                                            token_value = token_stream[i][1] 
+                                        if token_type=="CL_PARENT":
+                                            if i < (len(token_stream)-1):
+                                                i += 1
+                                                token_type = token_stream[i][0]
+                                                token_value = token_stream[i][1]
+                                            if token_type=="OP_BRACK":
+                                                Ui_MainWindow.OUTPUT.append(" If statement success!")
+                                                self.iffound=True
+                                                break
+                                            elif token_type =="NEWLINE":
+                                                while token_type =="NEWLINE":
+                                                    if i < (len(token_stream)-1):
+                                                        i += 1
+                                                        token_type = token_stream[i][0]
+                                                        token_value = token_stream[i][1]
+                                                if token_type!="OP_BRACK":
+                                                    self.DisplayError('{')
+                                                Ui_MainWindow.OUTPUT.append(" If statement success!")
+                                                self.iffound=True
+                                                break
+                                        else:
+                                            self.DisplayError(')')
                                     else:
-                                        self.DisplayError('{')
+                                        self.DisplayError('ivc')
                                 else:
-                                    self.DisplayError(')')
-                            else:
-                                self.DisplayError('ivc')
+                                    self.DisplayError('<')
                         else:
                             self.DisplayError('<')
                     else:
@@ -763,8 +822,17 @@ class Parser(object):
                     Ui_MainWindow.OUTPUT.append(" else stat success!")
                     self.elsefound=True
                     break
-                else:
-                    self.DisplayError('{')
+                elif token_type =="NEWLINE":
+                    while token_type =="NEWLINE":
+                        if i < (len(token_stream)-1):
+                            i += 1
+                            token_type = token_stream[i][0]
+                            token_value = token_stream[i][1]
+                    if token_type!="OP_BRACK":
+                        self.DisplayError('{')
+                    Ui_MainWindow.OUTPUT.append(" else stat success!")
+                    self.elsefound=True
+                    break
             else:
                 self.DisplayError('else')
             tokens_checked+=1
@@ -772,7 +840,7 @@ class Parser(object):
     def parse_mainfunc(self,token_stream):
         tokens_checked= 0
         i=0
-        
+        self.t=False
         for token in range(0,len(token_stream)):
             token_type = token_stream[tokens_checked][0]
             token_value = token_stream[tokens_checked][1]
@@ -809,12 +877,61 @@ class Parser(object):
                                         i += 1
                                         token_type = token_stream[i][0]
                                         token_value = token_stream[i][1]
+                                        print(token_type)
                                     if token_type == "OP_BRACK":
-                                        Ui_MainWindow.OUTPUT.append(" Function success!")
+                                        if i < (len(token_stream)-1):
+                                            i += 1
+                                            token_type = token_stream[i][0]
+                                            token_value = token_stream[i][1]
+                                        while token_type == "NEWLINE":
+                                            if i < (len(token_stream)-1):
+                                                i += 1
+                                                token_type = token_stream[i][0]
+                                                token_value = token_stream[i][1]
+                                                self.t=True
+                                              
+                                        if token_type=="OP_BRACK" and self.t==True:
+                                            self.DisplayError("+{")
+                                        Ui_MainWindow.OUTPUT.append(" Main success!")
                                         self.mainfound = True
                                         break
-                                    elif token_type !="OP_BRACK":
-                                        self.DisplayError('{')
+                                    elif token_type =="NEWLINE":
+                                        while token_type =="NEWLINE":
+                                            if i < (len(token_stream)-1):
+                                                i += 1
+                                                token_type = token_stream[i][0]
+                                                token_value = token_stream[i][1]
+                                             
+                                        if token_type=="OP_BRACK":
+                                            if token_type == "NEWLINE":
+                                                while token_type =="NEWLINE":
+                                                    if i < (len(token_stream)-1):
+                                                        i += 1
+                                                        token_type = token_stream[i][0]
+                                                        token_value = token_stream[i][1]
+                                                        self.t=True
+                                                       
+                                                if token_type=="OP_BRACK" and self.t==True:
+                                                    self.DisplayError('+{')
+                                            if i < (len(token_stream)-1):
+                                                    i += 1
+                                                    token_type = token_stream[i][0]
+                                                    token_value = token_stream[i][1]
+                                            while token_type =="NEWLINE":
+                                                    if i < (len(token_stream)-1):
+                                                        i += 1
+                                                        token_type = token_stream[i][0]
+                                                        token_value = token_stream[i][1]
+                                                       
+                                            if token_type=="OP_BRACK":
+                                                self.DisplayError('+{')
+                                            Ui_MainWindow.OUTPUT.append(" Main success!")
+                                            self.mainfound = True
+                                            break
+                                        else:
+                                            self.DisplayError("{")
+                                    else:
+                                        self.DisplayError("{")
                                 elif token_type !="CL_PARENT":
                                     self.DisplayError(')')
                             elif token_type !="OP_PARENT":
@@ -832,33 +949,80 @@ class Parser(object):
             else:
                 tokens_checked+=1
           
-            self.token_index += tokens_checked
+        self.token_index += tokens_checked
             
     ###############Class Check######################
     def parse_classdeclaration(self,token_stream):
         tokens_checked= 0
         i=0
-        
+        self.t=False
         for token in range(0,len(token_stream)):
             token_type = token_stream[tokens_checked][0]
             token_value = token_stream[tokens_checked][1]
-            i += 1
-            token_type = token_stream[i][0]
-            token_value = token_stream[i][1]
-            print(token_value)
+            if i < (len(token_stream)-1):
+                i += 1
+                token_type = token_stream[i][0]
+                token_value = token_stream[i][1]
             if token_type == "IDENTIF":
                 if re.match("^[A-Za-z]+$",token_value):
                     if i < (len(token_stream)-1):
                         i += 1
                         token_type = token_stream[i][0]
                         token_value = token_stream[i][1]
-                    
                     if token_type == "OP_BRACK":
+                        if i < (len(token_stream)-1):
+                            i += 1
+                            token_type = token_stream[i][0]
+                            token_value = token_stream[i][1]
+                        while token_type == "NEWLINE":
+                            if i < (len(token_stream)-1):
+                                i += 1
+                                token_type = token_stream[i][0]
+                                token_value = token_stream[i][1]
+                                self.t=True
+                        if token_type=="OP_BRACK" and self.t==True:
+                            self.DisplayError("+{")
                         Ui_MainWindow.OUTPUT.append(" Class success!")
                         self.classfound = True
                         break
-                    elif token_type !="OP_BRACK":
-                        self.DisplayError('{')
+                    elif token_type =="NEWLINE":
+                        while token_type =="NEWLINE":
+                            if i < (len(token_stream)-1):
+                                i += 1
+                                token_type = token_stream[i][0]
+                                token_value = token_stream[i][1]
+                                
+                        if token_type=="OP_BRACK":
+                            if token_type == "NEWLINE":
+                                while token_type =="NEWLINE":
+                                    if i < (len(token_stream)-1):
+                                        i += 1
+                                        token_type = token_stream[i][0]
+                                        token_value = token_stream[i][1]
+                                        self.t=True
+                                        
+                                if token_type=="OP_BRACK" and self.t==True:
+                                    self.DisplayError('+{')
+                            if i < (len(token_stream)-1):
+                                        i += 1
+                                        token_type = token_stream[i][0]
+                                        token_value = token_stream[i][1]
+                            while token_type =="NEWLINE":
+                                    if i < (len(token_stream)-1):
+                                        i += 1
+                                        token_type = token_stream[i][0]
+                                        token_value = token_stream[i][1]
+                                    
+                            if token_type=="OP_BRACK":
+                                self.DisplayError('+{')
+                            Ui_MainWindow.OUTPUT.append(" Class success!")
+                            self.classfound = True
+                            break
+                        else:
+                            
+                            self.DisplayError("{")
+                    else:
+                        self.DisplayError("{")
                 elif re.match("^[A-Za-z0-9]+$",token_value):
                     self.DisplayError('ivcn')
             elif token_type != "IDENTIF":
@@ -881,6 +1045,8 @@ class Parser(object):
             Ui_MainWindow.OUTPUT.append(" ERROR : closed curly bracket expected ' } ' in line : "+str(self.line))
         if(answ=="+}"):
             Ui_MainWindow.OUTPUT.append(" ERROR : there is an additional curly bracket' } ' in line : "+str(self.line))
+        if(answ=="+{"):
+            Ui_MainWindow.OUTPUT.append(" ERROR : there is an additional curly bracket' { ' in line : "+str(self.line))
         if(answ=='c'):
             Ui_MainWindow.OUTPUT.append(" SYNTAX ERROR : invalid class name in line : "+str(self.line))
         if(answ=='cnf'):
