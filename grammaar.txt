@@ -1,31 +1,33 @@
-statement   : KEYWORD:class IDENTIFIER { func }
 
-func        : KEYWORD:public KEYWORD:void IDENTIFIER () { atom }
-            : atom
+integer     : [0123456789]+.[0123456789]+
+float       : [0123456789]+
+letters     : [A-Z a-z]*
+letter      : [A-Z a-z]?
+
+statement   : class IDENTIFIER { func }
+
+function    : public static void main () { code }
+            : code
         
-
-expr        : DIGIT?
-            : letters?
-
-
-DIGIT       :0123456789
-letters     :A-Z a-z
-
-
-atom        : KEYWORD:(int|float) IDENTIFIER (= DIGIT;|;)
-            : KEYWORD:char IDENTIFIER (= 'letters')
-            : Scanner-dec
-            : KEYWORD:System . out . println(expr)
+code        : (int|float) IDENTIFIER (= DIGIT;|;)
+            : char IDENTIFIER (= 'letter';|;)
+            : String IDENTIFIER (= "letters";|;)
+            : scanner
+            : System.out.println(expr)
             : if-expr
 
+expr        : integer?
+            : letter
+            : float
 
-scanner-dec : KEYWORD:Scanner IDENTIFIER = KEYWORD:new Scanner(System.in);
+
+scanner     : Scanner IDENTIFIER = new Scanner(System.in);
             : int IDENTIFIER = IDENTIFIER.nextInt();
             : float IDENTIFIER = IDENTIFIER.nextFloat();
             : String IDENTIFIER = IDENTIFIER.nextLine();
 
 
-if-expr     : KEYWORD:if ( expr = expr ) { atom } (else-expr|;)
+if-expr     : if ( expr = expr ) { code } (else-expr|;)
 
 
-else-expr   : KEYWORD:else { atom };
+else-expr   : else { code };

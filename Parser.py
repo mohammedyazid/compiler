@@ -57,7 +57,9 @@ class Parser(object):
                         self.parse_scannercheck(self.tokens[self.token_index:len(self.tokens)]) 
                     elif token_type != "PUBLIC" and self.token_index ==len(self.tokens)-1 and self.mainfound==False:
                         Ui_MainWindow.OUTPUT.append(" ERROR : Main Function Not Found")
-                        
+                    else:
+                        # self.DisplayError("unknown")
+                        pass
                     if token_value == "}":
                         self.brackcount+=1                   
                     self.token_index+=1
@@ -72,16 +74,17 @@ class Parser(object):
             self.token_index+=1
         if self.classfound==True and self.mainfound==True and self.brackcount < 2:
                 self.DisplayError('}')
-        elif self.parse_classdeclaration==True and self.mainfound==True and self.iffound==False and self.elsefound==False and self.brackcount>2:
+        elif self.classfound==True and self.mainfound==True and self.iffound==False and self.elsefound==False and self.brackcount>2:
             self.DisplayError('+}')
-        if self.iffound==True and self.brackcount<3 and self.elsefound==False:
+        elif self.iffound==True and self.brackcount<3 and self.elsefound==False:
                 self.DisplayError('}')
         elif self.iffound==True and self.brackcount>3 and self.elsefound==False:
             self.DisplayError('+}')
-        if self.iffound==True and self.elsefound==True and self.brackcount<4:
+        elif self.iffound==True and self.elsefound==True and self.brackcount<4:
                 self.DisplayError('}')
         elif self.iffound==True and self.elsefound==True and self.brackcount>4:
             self.DisplayError('+}')
+        
     ##################Variable Declaration Function############
     def parse_variable_declaration(self,token_stream):
         tokens_checked= 0
@@ -93,22 +96,26 @@ class Parser(object):
             
             #########Int Declaration###########
             if token_type == "INT_DECLARATION":
-                i += 1
-                token_type = token_stream[i][0]
-                token_value = token_stream[i][1]
+                if i < (len(token_stream)-1):
+                    i += 1
+                    token_type = token_stream[i][0]
+                    token_value = token_stream[i][1]
                 if token_type == "IDENTIF":
                     if re.match("^[A-Za-z]+[A-Za-z0-9]*$",token_value):
-                        i += 1
-                        token_type = token_stream[i][0]
-                        token_value = token_stream[i][1]
-                        if token_value == "=":
+                        if i < (len(token_stream)-1):
                             i += 1
                             token_type = token_stream[i][0]
                             token_value = token_stream[i][1]
-                            if token_type == "NUMBER":
+                        if token_value == "=":
+                            if i < (len(token_stream)-1):
                                 i += 1
                                 token_type = token_stream[i][0]
                                 token_value = token_stream[i][1]
+                            if token_type == "NUMBER":
+                                if i < (len(token_stream)-1):
+                                    i += 1
+                                    token_type = token_stream[i][0]
+                                    token_value = token_stream[i][1]
                                 if token_type == "STATEMENT_END":
                                     Ui_MainWindow.OUTPUT.append(" Int Declaration success!")
                                     break
@@ -120,25 +127,30 @@ class Parser(object):
                             else:
                                 if token_type == "IDENTIF":
                                     if re.match("^[A-Za-z]+[A-Za-z0-9]*$",token_value):
-                                        i += 1
-                                        token_type = token_stream[i][0]
-                                        token_value = token_stream[i][1]
-                                        if token_type=="DOT":
+                                        if i < (len(token_stream)-1):
                                             i += 1
                                             token_type = token_stream[i][0]
                                             token_value = token_stream[i][1]
-                                            if token_type == "NEXT_INT":
+                                        if token_type=="DOT":
+                                            if i < (len(token_stream)-1):
                                                 i += 1
                                                 token_type = token_stream[i][0]
                                                 token_value = token_stream[i][1]
-                                                if token_type == "OP_PARENT":
+                                            if token_type == "NEXT_INT":
+                                                if i < (len(token_stream)-1):
                                                     i += 1
                                                     token_type = token_stream[i][0]
                                                     token_value = token_stream[i][1]
-                                                    if token_type == "CL_PARENT":
+                                                if token_type == "OP_PARENT":
+                                                    if i < (len(token_stream)-1):
                                                         i += 1
                                                         token_type = token_stream[i][0]
                                                         token_value = token_stream[i][1]
+                                                    if token_type == "CL_PARENT":
+                                                        if i < (len(token_stream)-1):
+                                                            i += 1
+                                                            token_type = token_stream[i][0]
+                                                            token_value = token_stream[i][1]
                                                         if token_type == "STATEMENT_END":
                                                             if self.scannerfound ==True:
                                                                 Ui_MainWindow.OUTPUT.append(" Getting integer input succesfully!")
@@ -179,25 +191,30 @@ class Parser(object):
                 token_value = token_stream[i][1]
                 if token_type == "IDENTIF":
                     if re.match("^[A-Za-z]+[A-Za-z0-9]*$",token_value):
-                        i += 1
-                        token_type = token_stream[i][0]
-                        token_value = token_stream[i][1]
-                        if token_value == "=":
+                        if i < (len(token_stream)-1):
                             i += 1
                             token_type = token_stream[i][0]
                             token_value = token_stream[i][1]
-                            if token_type == "NUMBER":
+                        if token_value == "=":
+                            if i < (len(token_stream)-1):
                                 i += 1
                                 token_type = token_stream[i][0]
                                 token_value = token_stream[i][1]
-                                if token_type == "DOT":
+                            if token_type == "NUMBER":
+                                if i < (len(token_stream)-1):
                                     i += 1
                                     token_type = token_stream[i][0]
                                     token_value = token_stream[i][1]
-                                    if token_type == "NUMBER":
+                                if token_type == "DOT":
+                                    if i < (len(token_stream)-1):
                                         i += 1
                                         token_type = token_stream[i][0]
                                         token_value = token_stream[i][1]
+                                    if token_type == "NUMBER":
+                                        if i < (len(token_stream)-1):
+                                            i += 1
+                                            token_type = token_stream[i][0]
+                                            token_value = token_stream[i][1]
                                         if token_type == "STATEMENT_END":
                                             Ui_MainWindow.OUTPUT.append(" Float Declaration success!")
                                             break
@@ -215,25 +232,30 @@ class Parser(object):
                             else:
                                 if token_type == "IDENTIF":
                                     if re.match("^[A-Za-z]+[A-Za-z0-9]*$",token_value):
-                                        i += 1
-                                        token_type = token_stream[i][0]
-                                        token_value = token_stream[i][1]
-                                        if token_type=="DOT":
+                                        if i < (len(token_stream)-1):
                                             i += 1
                                             token_type = token_stream[i][0]
                                             token_value = token_stream[i][1]
-                                            if token_type == "NEXT_FLOAT":
+                                        if token_type=="DOT":
+                                            if i < (len(token_stream)-1):
                                                 i += 1
                                                 token_type = token_stream[i][0]
                                                 token_value = token_stream[i][1]
-                                                if token_type == "OP_PARENT":
+                                            if token_type == "NEXT_FLOAT":
+                                                if i < (len(token_stream)-1):
                                                     i += 1
                                                     token_type = token_stream[i][0]
                                                     token_value = token_stream[i][1]
-                                                    if token_type == "CL_PARENT":
+                                                if token_type == "OP_PARENT":
+                                                    if i < (len(token_stream)-1):
                                                         i += 1
                                                         token_type = token_stream[i][0]
                                                         token_value = token_stream[i][1]
+                                                    if token_type == "CL_PARENT":
+                                                        if i < (len(token_stream)-1):
+                                                            i += 1
+                                                            token_type = token_stream[i][0]
+                                                            token_value = token_stream[i][1]
                                                         if token_type == "STATEMENT_END":
                                                             if self.scannerfound ==True:
                                                                 Ui_MainWindow.OUTPUT.append(" Getting Float input succesfully!")
@@ -270,30 +292,36 @@ class Parser(object):
                     self.DisplayError('ivn')
             ############Char Declaration##############
             if token_type == "CHAR_DECLARATION":
-                i += 1
-                token_type = token_stream[i][0]
-                token_value = token_stream[i][1]
+                if i < (len(token_stream)-1):
+                    i += 1
+                    token_type = token_stream[i][0]
+                    token_value = token_stream[i][1]
                 if token_type == "IDENTIF":
                     if re.match("^[A-Za-z]+[A-Za-z0-9]*$",token_value):
-                        i += 1
-                        token_type = token_stream[i][0]
-                        token_value = token_stream[i][1]
-                        if token_value == "=":
+                        if i < (len(token_stream)-1):
                             i += 1
                             token_type = token_stream[i][0]
                             token_value = token_stream[i][1]
-                            if token_type == "PUNC_MARK":
+                        if token_value == "=":
+                            if i < (len(token_stream)-1):
                                 i += 1
                                 token_type = token_stream[i][0]
                                 token_value = token_stream[i][1]
-                                if re.match("^[A-Za-z0-9]{1}$",token_value):
+                            if token_type == "PUNC_MARK":
+                                if i < (len(token_stream)-1):
                                     i += 1
                                     token_type = token_stream[i][0]
                                     token_value = token_stream[i][1]
-                                    if token_type == "PUNC_MARK":
+                                if re.match("^[A-Za-z0-9]{1}$",token_value):
+                                    if i < (len(token_stream)-1):
                                         i += 1
                                         token_type = token_stream[i][0]
                                         token_value = token_stream[i][1]
+                                    if token_type == "PUNC_MARK":
+                                        if i < (len(token_stream)-1):
+                                            i += 1
+                                            token_type = token_stream[i][0]
+                                            token_value = token_stream[i][1]
                                         if token_type == "STATEMENT_END":
                                             Ui_MainWindow.OUTPUT.append(" Char Declaration success!")
                                             break
@@ -322,25 +350,30 @@ class Parser(object):
                 token_value = token_stream[i][1]
                 if token_type == "IDENTIF":
                     if re.match("^[A-Za-z]+[A-Za-z0-9]*$",token_value):
-                        i += 1
-                        token_type = token_stream[i][0]
-                        token_value = token_stream[i][1]
-                        if token_value == "=":
+                        if i < (len(token_stream)-1):
                             i += 1
                             token_type = token_stream[i][0]
                             token_value = token_stream[i][1]
-                            if token_type == "QUAT_MARK":
+                        if token_value == "=":
+                            if i < (len(token_stream)-1):
                                 i += 1
                                 token_type = token_stream[i][0]
                                 token_value = token_stream[i][1]
-                                if re.match("^[A-Za-z0-9]*$",token_value):
+                            if token_type == "QUAT_MARK":
+                                if i < (len(token_stream)-1):
                                     i += 1
                                     token_type = token_stream[i][0]
                                     token_value = token_stream[i][1]
-                                    if token_type == "QUAT_MARK":
+                                if re.match("^[A-Za-z0-9]*$",token_value):
+                                    if i < (len(token_stream)-1):
                                         i += 1
                                         token_type = token_stream[i][0]
                                         token_value = token_stream[i][1]
+                                    if token_type == "QUAT_MARK":
+                                        if i < (len(token_stream)-1):
+                                            i += 1
+                                            token_type = token_stream[i][0]
+                                            token_value = token_stream[i][1]
                                         if token_type == "STATEMENT_END":
                                             Ui_MainWindow.OUTPUT.append(" String Declaration success!")
                                             break
@@ -356,26 +389,31 @@ class Parser(object):
                             else:
                                 if token_type == "IDENTIF":
                                     if re.match("^[A-Za-z]+[A-Za-z0-9]*$",token_value):
-                                        i += 1
-                                        token_type = token_stream[i][0]
-                                        token_value = token_stream[i][1]
-                                        if token_type=="DOT":
+                                        if i < (len(token_stream)-1):
                                             i += 1
                                             token_type = token_stream[i][0]
                                             token_value = token_stream[i][1]
-                                            print(token_type)
-                                            if token_type == "NEXT_LINE":
+                                        if token_type=="DOT":
+                                            if i < (len(token_stream)-1):
                                                 i += 1
                                                 token_type = token_stream[i][0]
                                                 token_value = token_stream[i][1]
-                                                if token_type == "OP_PARENT":
+                                            print(token_type)
+                                            if token_type == "NEXT_LINE":
+                                                if i < (len(token_stream)-1):
                                                     i += 1
                                                     token_type = token_stream[i][0]
                                                     token_value = token_stream[i][1]
-                                                    if token_type == "CL_PARENT":
+                                                if token_type == "OP_PARENT":
+                                                    if i < (len(token_stream)-1):
                                                         i += 1
                                                         token_type = token_stream[i][0]
                                                         token_value = token_stream[i][1]
+                                                    if token_type == "CL_PARENT":
+                                                        if i < (len(token_stream)-1):
+                                                            i += 1
+                                                            token_type = token_stream[i][0]
+                                                            token_value = token_stream[i][1]
                                                         if token_type == "STATEMENT_END":
                                                             if self.scannerfound ==True:
                                                                 Ui_MainWindow.OUTPUT.append(" Getting Line input succesfully!")
@@ -416,45 +454,55 @@ class Parser(object):
             token_type = token_stream[tokens_checked][0]
             token_value = token_stream[tokens_checked][1]
             if token_type == "SYSTEM":
-                i += 1
-                token_type = token_stream[i][0]
-                token_value = token_stream[i][1]
-                if token_type == "DOT":
+                if i < (len(token_stream)-1):
                     i += 1
                     token_type = token_stream[i][0]
                     token_value = token_stream[i][1]
-                    if token_type == "OUT":
+                if token_type == "DOT":
+                    if i < (len(token_stream)-1):
                         i += 1
                         token_type = token_stream[i][0]
                         token_value = token_stream[i][1]
-                        if token_type == "DOT":
+                    if token_type == "OUT":
+                        if i < (len(token_stream)-1):
                             i += 1
                             token_type = token_stream[i][0]
                             token_value = token_stream[i][1]
-                            if token_type == "PRINT":
+                        if token_type == "DOT":
+                            if i < (len(token_stream)-1):
                                 i += 1
                                 token_type = token_stream[i][0]
                                 token_value = token_stream[i][1]
-                                if token_type == "OP_PARENT":
+                            if token_type == "PRINT":
+                                if i < (len(token_stream)-1):
                                     i += 1
                                     token_type = token_stream[i][0]
                                     token_value = token_stream[i][1]
-                                    if token_type == "QUAT_MARK":
+                                if token_type == "OP_PARENT":
+                                    if i < (len(token_stream)-1):
                                         i += 1
                                         token_type = token_stream[i][0]
                                         token_value = token_stream[i][1]
-                                        while token_type != "QUAT_MARK":
+                                    if token_type == "QUAT_MARK":
+                                        if i < (len(token_stream)-1):
                                             i += 1
                                             token_type = token_stream[i][0]
                                             token_value = token_stream[i][1]
-                                        if token_type == "QUAT_MARK":
+                                        while token_type != "QUAT_MARK":
+                                            if i < (len(token_stream)-1):
                                                 i += 1
                                                 token_type = token_stream[i][0]
                                                 token_value = token_stream[i][1]
-                                                if token_type == "CL_PARENT":
+                                        if token_type == "QUAT_MARK":
+                                                if i < (len(token_stream)-1):
                                                     i += 1
                                                     token_type = token_stream[i][0]
                                                     token_value = token_stream[i][1]
+                                                if token_type == "CL_PARENT":
+                                                    if i < (len(token_stream)-1):
+                                                        i += 1
+                                                        token_type = token_stream[i][0]
+                                                        token_value = token_stream[i][1]
                                                     if token_type == "STATEMENT_END":
                                                         Ui_MainWindow.OUTPUT.append(" Print Success!")
                                                         break
@@ -466,21 +514,25 @@ class Parser(object):
                                                 self.DisplayError('"')
                                     else:
                                         if token_type == "PUNC_MARK":
-                                            i += 1
-                                            token_type = token_stream[i][0]
-                                            token_value = token_stream[i][1]
-                                            if re.match("^.{1}$",token_value):
+                                            if i < (len(token_stream)-1):
                                                 i += 1
                                                 token_type = token_stream[i][0]
                                                 token_value = token_stream[i][1]
-                                                if token_type == "PUNC_MARK":
+                                            if re.match("^.{1}$",token_value):
+                                                if i < (len(token_stream)-1):
                                                     i += 1
                                                     token_type = token_stream[i][0]
                                                     token_value = token_stream[i][1]
-                                                    if token_type == "CL_PARENT":
+                                                if token_type == "PUNC_MARK":
+                                                    if i < (len(token_stream)-1):
                                                         i += 1
                                                         token_type = token_stream[i][0]
                                                         token_value = token_stream[i][1]
+                                                    if token_type == "CL_PARENT":
+                                                        if i < (len(token_stream)-1):
+                                                            i += 1
+                                                            token_type = token_stream[i][0]
+                                                            token_value = token_stream[i][1]
                                                         if token_type == "STATEMENT_END":
                                                             Ui_MainWindow.OUTPUT.append(" Print Success!")
                                                             break
@@ -516,46 +568,56 @@ class Parser(object):
             token_value = token_stream[tokens_checked][1]
             print(token_type)
             if token_type == "SCANNER":
-                i += 1
-                token_type = token_stream[i][0]
-                token_value = token_stream[i][1]
+                if i < (len(token_stream)-1):
+                    i += 1
+                    token_type = token_stream[i][0]
+                    token_value = token_stream[i][1]
                 if token_type == "IDENTIF":
                     if re.match("^[A-Za-z]+[A-Za-z0-9]*$",token_value):
-                        i += 1
-                        token_type = token_stream[i][0]
-                        token_value = token_stream[i][1]
-                        if token_type == "OPERATEUR":
+                        if i < (len(token_stream)-1):
                             i += 1
                             token_type = token_stream[i][0]
-                            token_value = token_stream[i][1]                       
-                            if token_type=="NEW":
+                            token_value = token_stream[i][1]
+                        if token_type == "OPERATEUR":
+                            if i < (len(token_stream)-1):
                                 i += 1
                                 token_type = token_stream[i][0]
-                                token_value = token_stream[i][1]
-                                if token_type == "SCANNER":
+                                token_value = token_stream[i][1]                       
+                            if token_type=="NEW":
+                                if i < (len(token_stream)-1):
                                     i += 1
                                     token_type = token_stream[i][0]
                                     token_value = token_stream[i][1]
-                                    if token_type == "OP_PARENT":
+                                if token_type == "SCANNER":
+                                    if i < (len(token_stream)-1):
                                         i += 1
                                         token_type = token_stream[i][0]
                                         token_value = token_stream[i][1]
-                                        if token_type=="SYSTEM":
+                                    if token_type == "OP_PARENT":
+                                        if i < (len(token_stream)-1):
                                             i += 1
                                             token_type = token_stream[i][0]
                                             token_value = token_stream[i][1]
-                                            if token_type =="DOT":
+                                        if token_type=="SYSTEM":
+                                            if i < (len(token_stream)-1):
                                                 i += 1
                                                 token_type = token_stream[i][0]
                                                 token_value = token_stream[i][1]
-                                                if token_type=="IN":
+                                            if token_type =="DOT":
+                                                if i < (len(token_stream)-1):
                                                     i += 1
                                                     token_type = token_stream[i][0]
                                                     token_value = token_stream[i][1]
-                                                    if token_type == "CL_PARENT":
+                                                if token_type=="IN":
+                                                    if i < (len(token_stream)-1):
                                                         i += 1
                                                         token_type = token_stream[i][0]
                                                         token_value = token_stream[i][1]
+                                                    if token_type == "CL_PARENT":
+                                                        if i < (len(token_stream)-1):
+                                                            i += 1
+                                                            token_type = token_stream[i][0]
+                                                            token_value = token_stream[i][1]
                                                         if token_type == "STATEMENT_END":
                                                             Ui_MainWindow.OUTPUT.append(" scanner declaration success!")
                                                             self.scannerfound =True
@@ -598,17 +660,20 @@ class Parser(object):
             token_type = token_stream[tokens_checked][0]
             token_value = token_stream[tokens_checked][1]
             if token_type == "IDENTIF":
-                i += 1
-                token_type = token_stream[i][0]
-                token_value = token_stream[i][1]
-                if token_value == "=":
+                if i < (len(token_stream)-1):
                     i += 1
                     token_type = token_stream[i][0]
                     token_value = token_stream[i][1]
-                    if token_type == "INTEGER" or token_type=="FLOAT":
+                if token_value == "=":
+                    if i < (len(token_stream)-1):
                         i += 1
                         token_type = token_stream[i][0]
                         token_value = token_stream[i][1]
+                    if token_type == "INTEGER" or token_type=="FLOAT":
+                        if i < (len(token_stream)-1):
+                            i += 1
+                            token_type = token_stream[i][0]
+                            token_value = token_stream[i][1]
                         if token_value == ";":
                             self.DisplayError('uvt')
                         else:
@@ -629,33 +694,40 @@ class Parser(object):
             token_type = token_stream[tokens_checked][0]
             token_value = token_stream[tokens_checked][1]
             if token_type == "IF_STAT":
-                i += 1
-                token_type = token_stream[i][0]
-                token_value = token_stream[i][1]
-                if token_type == "OP_PARENT":
+                if i < (len(token_stream)-1):
                     i += 1
                     token_type = token_stream[i][0]
                     token_value = token_stream[i][1]
-                    if token_type=="IDENTIF" or token_type=="NUMBER":
+                if token_type == "OP_PARENT":
+                    if i < (len(token_stream)-1):
                         i += 1
                         token_type = token_stream[i][0]
                         token_value = token_stream[i][1]
-                        if token_value ==">" or token_value =="<" or token_value=="=":
+                    if token_type=="IDENTIF" or token_type=="NUMBER":
+                        if i < (len(token_stream)-1):
                             i += 1
                             token_type = token_stream[i][0]
                             token_value = token_stream[i][1]
-                            if token_value =="=":
+                        if token_value ==">" or token_value =="<" or token_value=="=":
+                            if i < (len(token_stream)-1):
                                 i += 1
                                 token_type = token_stream[i][0]
                                 token_value = token_stream[i][1]
-                            if token_type =="IDENTIF" or "NUMBER":
-                                i += 1
-                                token_type = token_stream[i][0]
-                                token_value = token_stream[i][1] 
-                                if token_type=="CL_PARENT":
+                            if token_value =="=":
+                                if i < (len(token_stream)-1):
                                     i += 1
                                     token_type = token_stream[i][0]
                                     token_value = token_stream[i][1]
+                            if token_type =="IDENTIF" or "NUMBER":
+                                if i < (len(token_stream)-1):
+                                    i += 1
+                                    token_type = token_stream[i][0]
+                                    token_value = token_stream[i][1] 
+                                if token_type=="CL_PARENT":
+                                    if i < (len(token_stream)-1):
+                                        i += 1
+                                        token_type = token_stream[i][0]
+                                        token_value = token_stream[i][1]
                                     if token_type=="OP_BRACK":
                                         Ui_MainWindow.OUTPUT.append(" If statement success!")
                                         self.iffound=True
@@ -683,9 +755,10 @@ class Parser(object):
             token_type = token_stream[tokens_checked][0]
             token_value = token_stream[tokens_checked][1]
             if token_type == "ELSE_STAT":
-                i += 1
-                token_type = token_stream[i][0]
-                token_value = token_stream[i][1]
+                if i < (len(token_stream)-1):
+                    i += 1
+                    token_type = token_stream[i][0]
+                    token_value = token_stream[i][1]
                 if token_type=="OP_BRACK":
                     Ui_MainWindow.OUTPUT.append(" else stat success!")
                     self.elsefound=True
@@ -707,29 +780,35 @@ class Parser(object):
             token_type = token_stream[i][0]
             token_value = token_stream[i][1]
             if token_type == "PUBLIC":
-                i += 1            
-                token_type = token_stream[i][0]
-                token_value = token_stream[i][1]
-                if token_type == "STATIC":
-                    i += 1
+                if i < (len(token_stream)-1):
+                    i += 1            
                     token_type = token_stream[i][0]
                     token_value = token_stream[i][1]
-                    if token_type == "VOID":
+                if token_type == "STATIC":
+                    if i < (len(token_stream)-1):
                         i += 1
                         token_type = token_stream[i][0]
                         token_value = token_stream[i][1]
-                        if token_type == "IDENTIF" and token_value=="main":
+                    if token_type == "VOID":
+                        if i < (len(token_stream)-1):
                             i += 1
                             token_type = token_stream[i][0]
                             token_value = token_stream[i][1]
-                            if token_type == "OP_PARENT":
+                        if token_type == "IDENTIF" and token_value=="main":
+                            if i < (len(token_stream)-1):
                                 i += 1
                                 token_type = token_stream[i][0]
                                 token_value = token_stream[i][1]
-                                if token_type == "CL_PARENT":
+                            if token_type == "OP_PARENT":
+                                if i < (len(token_stream)-1):
                                     i += 1
                                     token_type = token_stream[i][0]
                                     token_value = token_stream[i][1]
+                                if token_type == "CL_PARENT":
+                                    if i < (len(token_stream)-1):
+                                        i += 1
+                                        token_type = token_stream[i][0]
+                                        token_value = token_stream[i][1]
                                     if token_type == "OP_BRACK":
                                         Ui_MainWindow.OUTPUT.append(" Function success!")
                                         self.mainfound = True
@@ -766,11 +845,14 @@ class Parser(object):
             i += 1
             token_type = token_stream[i][0]
             token_value = token_stream[i][1]
+            print(token_value)
             if token_type == "IDENTIF":
                 if re.match("^[A-Za-z]+$",token_value):
-                    i += 1
-                    token_type = token_stream[i][0]
-                    token_value = token_stream[i][1]
+                    if i < (len(token_stream)-1):
+                        i += 1
+                        token_type = token_stream[i][0]
+                        token_value = token_stream[i][1]
+                    
                     if token_type == "OP_BRACK":
                         Ui_MainWindow.OUTPUT.append(" Class success!")
                         self.classfound = True
@@ -867,6 +949,8 @@ class Parser(object):
             Ui_MainWindow.OUTPUT.append(" ERROR : excpected nextLine in line : "+str(self.line))
         if(answ=='ivpv'):
             Ui_MainWindow.OUTPUT.append(" ERROR : invalid printed string in line : "+str(self.line))
+        if(answ=='unknown'):
+            Ui_MainWindow.OUTPUT.append(" ERROR : unknown or invalid statement in line : "+str(self.line))
         raise Stop()
 class Stop (Exception):
     def __init__ (self):

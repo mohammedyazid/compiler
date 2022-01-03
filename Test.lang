@@ -1,16 +1,11 @@
-
-class App {
+class main{
+    float dd = 5.5;
     public static void main() {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Type any number");
-        int num1=sc.nextInt();
-        float num2=sc.nextFloat();
-        String msg = sc.nextLine();
-        if(numnum2==2){
-        System.out.println('A');
-    
-    }else{
-        System.out.println(":>");
-    }
-}
-}
+    int gh5 = 55;
+    char h52 = 'h';
+    float dd =5.5;
+    if (a == b) { 
+        int dd = 55;
+    } else { 
+        } 
+    } }
